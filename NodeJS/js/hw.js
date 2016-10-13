@@ -9,4 +9,3 @@ eventEmitter.on('eventName', eventHandler);
 
 // 触发事件
 eventEmitter.emit('eventName');
-
