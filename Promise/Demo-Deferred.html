@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Document-Deferred</title>
+		<script type="text/javascript" src="jquery-3.1.1.js" ></script>
+		<script type="text/javascript">
+			$(function() {
+				function runAsync() {
+					var def = $.Deferred();
+					setTimeout(function() {
+						console.log('执行完成！');
+						def.resolve('成功返回！');
+					}, 2000);
+					return def;
+				}
+				runAsync().then(function(data) {
+					//console.log(data);
+				});
+				/* 这样也有一个弊端，因为执行runAsync()可以拿到def对象，
+				 * 而def对象上又有resolve方法，那么岂不是可以在外部就修改def的状态了？比如我把上面的代码修改如下：
+				 * 现象会如何呢？并不会在2秒后输出“执行完成”，而是直接输出“我穿越了”。
+				 * 因为我们在异步操作执行完成之前，没等他自己resolve，就在外部给resolve了。
+				 * 这显然是有风险的，比如你定义的一个异步操作并指定好回调函数，
+				 * 有可能被别人给提前结束掉，你的回调函数也就不能执行了。
+				 * 怎么办？jquery提供了一个promise方法，就在def对象上，
+				 * 他可以返回一个受限的Deferred对象，所谓受限就是没有resolve、reject等方法，
+				 * 无法从外部来改变他的状态，用法如下：
+				 */
+				/*
+				var pms = runAsync();
+				pms.then(function(data) {
+					console.log(data);
+				});
+				//pms.resolve('替换原先的resolve内容！');
+				*/
+				var pms = runAsync();
+				pms.then(function(data) {
+					console.log('1:' + data);
+					return runAsync();
+				})
+				.then(function(data){
+					console.log('2:' + data);
+					return runAsync();
+				})
+				.then(function(data){
+					console.log('3:' + data);
+				});
+				//pms.resolve('替换原先的resolve内容！');
+			})
+		</script>
+	</head>
+	<body>
+		<div style="margin: 100px;">
+			再来看看jquery里面的$.Deferred：<br/>
+			jquery用$.Deferred实现了Promise规范，$.Deferred是个什么玩意呢？还是老方法，打印出来看看，先有个直观印象：<br/>
+			var def = $.Deferred();<br/>
+			console.log(def);<br/>
+			$.Deferred()返回一个对象，我们可以称之为Deferred对象，<br/>
+			上面挂着一些熟悉的方法如：done、fail、then等。jquery就是用这个Deferred对象来注册异步操作的回调函数，<br/>
+			修改并传递异步操作的状态。<br/>
+			Deferred对象的基本用法如下，为了不与ajax混淆，我们依旧举setTimeout的例子：<br/>
+			
+			在runAsync函数中，我们首先定义了一个def对象，然后进行一个延时操作，在2秒后调用def.resolve()，<br/>
+			最后把def作为函数的返回。调用runAsync的时候将返回def对象，然后我们就可以.then来执行回调函数。<br/>
+			是不是感觉和ES6的Promise很像呢？<br/>
+			区别在何处一看便知。由于jquery的def对象本身就有resolve方法，<br/>
+			所以我们在创建def对象的时候并未像ES6这样传入了一个函数参数，是空的。<br/>
+			在后面可以直接def.resolve()这样调用。<br/>
+		</div>
+	</body>
+</html>

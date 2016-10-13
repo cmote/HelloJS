@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Promise 学习笔记 -all</title>
+		<script>
+			window.onload = function() {
+				function pms1() {
+					return new Promise(function(resolve, reject) {
+						setTimeout(function(){
+							console.log('执行任务001');
+							resolve('执行任务001成功！');
+						//all
+						//}, 2000);
+						//race
+						}, 1000);
+					});
+				}
+				function pms2() {
+					return new Promise(function(resolve, reject) {
+						setTimeout(function(){
+							console.log('执行任务002');
+							resolve('执行任务002成功！');
+						//all
+						//}, 2000);
+						//race
+						}, 2000);
+					})
+				}
+				function pms3() {
+					return new Promise(function(resolve, reject) {
+						setTimeout(function(){
+							console.log('执行任务003');
+							resolve('执行任务003成功！');
+						//all
+						//}, 2000);
+						//race
+						}, 3000);
+					})
+				}
+				//all
+				/*Promise.all([pms1(), pms2(), pms3()]).then(function(data) {
+					console.log(data); //注意上面的延时
+					console.log().toString().call(data);
+				})*/
+				//race
+				Promise.race([pms1(), pms2(), pms3()]).then(function(data) {
+					console.log(data); //注意上面的延时
+					console.log().toString().call(data);
+				})
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 100px;">
+			用Promise.all来执行，all接收一个数组参数，里面的值最终都算返回Promise对象。<br/>
+			这样，三个异步操作的并行执行的，等到它们都执行完后才会进到then里面。<br/>
+			那么，三个异步操作返回的数据哪里去了呢？都在then里面呢，all会把所有异步操作的结果放进一个数组中传给then，<br/>
+			就是上面的results。<br/>
+			race的用法<br/>
+			all方法的效果实际上是「谁跑的慢，以谁为准执行回调」，<br/>
+			那么相对的就有另一个方法「谁跑的快，以谁为准执行回调」，<br/>
+			这就是race方法，这个词本来就是赛跑的意思。race的用法与all一样，<br/>
+			我们把上面runAsync1的延时改为1秒来看一下：<br/>
+			看到没：只有第一个执行了回调！<br/>
+			在then里面的回调开始执行时，runAsync2()和runAsync3()并没有停止，仍旧再执行。<br/>
+			于是再过1秒后，输出了他们结束的标志。<br/>
+			这个race有什么用呢？使用场景还是很多的，比如我们可以用race给某个异步请求设置超时时间，<br/>
+			并且在超时后执行相应的操作。<br/>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>JS Bin</title>
+		<!--<link rel="stylesheet" href="css/bootstrap.min.css" />-->
+		<script src="../tools/jQuery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="tooltip.js"></script>
+	</head>
+
+	<body>
+		<div id="tooltip">bs tooltip:你能点击链接？</div>
+		<hr>
+		<div id="delayTooltip">delay tooltip：尝试点击链接</div>
+		<hr>
+		<div id="delayTooltipInHtml" data-html="true" data-placement="bottom" data-toggle="delayTooltip">delay tooltip:利用html标签实现</div>
+		
+		<button class="pop" data-toggle="tooltip" title="Example tooltip">请悬停在我的上面</button>
+		<a class="pop" href="#" data-toggle="tooltip" title="Example tooltip">请悬停在我的上面</a>
+		<script>
+		$(function(){
+			$(".pop").popover({
+					trigger: "manual",
+					html: true,
+					animation: false
+				})
+				.on("mouseenter", function() {
+					var _this = this;
+					$(this).popover("show");
+					$(".popover").on("mouseleave", function() {
+						$(_this).popover('hide');
+					});
+				}).on("mouseleave", function() {
+					var _this = this;
+					setTimeout(function() {
+						if(!$(".popover:hover").length) {
+							$(_this).popover("hide");
+						}
+					}, 300);
+				});
+		});
+		</script>
+	</body>
+	<script>
+		(function(global, $) {
+			var page = function() {
+			};
+			page.prototype.bootstrap = function() {
+				var html = 'Weclome to my blog <a target="_blank" href="greengerong.github.io">破狼博客</a>!<input type="text" placeholder="input some thing"/>';
+				$('#tooltip').tooltip({
+					html: true,
+					placement: 'top',
+					title: html
+				});
+				$('#delayTooltip').delayTooltip({
+					html: true,
+					placement: 'bottom',
+					title: html
+				});
+				$('#delayTooltipInHtml').attr('title', html).delayTooltip();
+				return this;
+			};
+			global.Page = page;
+		})(this, jQuery);
+		$(function() {
+			'use strict';
+			var page = new window.Page().bootstrap();
+		});
+	</script>
+
+</html>

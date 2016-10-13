@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Promise 学习笔记</title>
+		<script>
+			window.onload = function() {
+				function pms1() {
+					return new Promise(function(resolve, reject) {
+						setTimeout(function(){
+							var num = Math.ceil(Math.random() * 10); //	生成1-10的随机数
+							if(num <= 5){
+								resolve(num);
+							} else {
+								reject('数字太大了！' + num);
+							}
+						}, 2000);
+					});
+				}
+				setInterval(function() {
+					pms1().then(function(data) {
+						//<=5
+						console.log(data);
+					}, function(data) {
+						//>5
+						console.log(data);
+					})
+				}, 1000)
+			}
+		</script>
+	</head>
+	<body>
+		<div style="margin: 100px;">
+			<p>
+				Promise 构造函数接受一个函数作为参数，该函数的两个参数分别是 resolve 方法和 reject 方法。<br/>
+				如果异步操作成功，则用 resolve 方法将 Promise 对象的状态，从「未完成」变为「成功」（即从 pending 变为 resolved）；<br/>
+				如果异步操作失败，则用 reject 方法将 Promise 对象的状态，从「未完成」变为「失败」（即从 pending 变为 rejected）。
+			</p>
+		</div>
+	</body>
+</html>

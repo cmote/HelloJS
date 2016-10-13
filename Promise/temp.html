@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--<script type="text/javascript" src="jquery-3.1.1.js" ></script>-->s
+		<script type="text/javascript" src="promise.js" ></script>
+		<script type="text/javascript">
+			/*
+			Promise.when(f1(), f2()).then(f3).then(f4)
+
+			function f1() {
+				var promise = Promise();
+				setTimeout(function() {
+
+					console.log(1);
+					promise.resolve("from f1");
+				}, 1500)
+
+				return promise;
+			}
+
+			function f2() {
+				var promise = Promise();
+				setTimeout(function() {
+
+					console.log(2);
+					promise.resolve();
+				}, 5500)
+
+				return promise;
+			}
+
+			function f3() {
+				var promise = Promise();
+				setTimeout(function() {
+
+					console.log(3);
+					promise.resolve();
+				}, 1500)
+
+				return promise;
+
+			}
+
+			function f4() {
+				var promise = Promise();
+				setTimeout(function() {
+
+					console.log(4);
+					promise.resolve();
+				}, 1500)
+
+				return promise;
+			}
+			*/
+			 Promise.timeout(f1(), 2000).then(f2, function () {
+            alert("timeout");
+        }).wait(5000).then(f3);
+        function f1() {
+            var promise = Promise();
+            setTimeout(function () {
+
+                console.log(1);
+                promise.resolve("from f1");
+            }, 1500)
+
+            return promise;
+        }
+
+        function f2() {
+            var promise = Promise();
+            setTimeout(function () {
+
+                console.log(2);
+                promise.resolve();
+            }, 1500)
+
+            return promise;
+        }
+
+        function f3() {
+            var promise = Promise();
+            setTimeout(function () {
+
+                console.log(3);
+                promise.resolve();
+            }, 1500)
+
+            return promise;
+
+        }
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>
