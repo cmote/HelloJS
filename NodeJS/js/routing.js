@@ -30,6 +30,6 @@ function start(){
 		response..end();
 	}
 	http.createServer(onRequest).listen(8888);
-	console.log('Server ha started.');
+	console.log('Server has started.');
 }
-exports.start;
+exports.start = start;
